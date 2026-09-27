@@ -172,6 +172,12 @@ export const ALL_SERVICES = [...SERVICES, WATCHTOWER_SERVICE];
 
 export const SERVICE_OPTIONS = ALL_SERVICES.map((service) => service.name);
 
+// The contact form offers a catch-all choice alongside the real services. It is
+// shared with the contact function so both sides agree on the exact wording.
+export const GENERAL_ENQUIRY_OPTION = 'Something else';
+
+export const SERVICE_CHOICES = [...SERVICE_OPTIONS, GENERAL_ENQUIRY_OPTION];
+
 // Every service in the list above owns a page at this path. Both the navigation
 // and the routes table read it from here so the two cannot drift apart.
 export function servicePath(id) {

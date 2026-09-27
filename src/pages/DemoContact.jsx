@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styles from './DemoContact.module.css';
+import useEnquirySubmit from '../hooks/useEnquirySubmit.js';
+import { WATCHTOWER_SERVICE } from '../data/services.js';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -45,14 +47,14 @@ const initialValues = {
   company: '',
   email: '',
   website: '',
-  message: ''
+  message: '',
+  fax_number: ''
 };
 
 export default function DemoContact() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const { submit, submitting, sent, message: submitMessage } = useEnquirySubmit();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,54 +74,25 @@ export default function DemoContact() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    setLoading(true);
+    // The honeypot is sent untouched. A person never fills it, so the function
+    // sees it empty and sends the request on. A bot that fills it is filtered.
+    const result = await submit({
+      source: 'demo',
+      product: WATCHTOWER_SERVICE.name,
+      fax_number: values.fax_number,
+      fullName: values.fullName.trim(),
+      company: values.company.trim(),
+      email: values.email.trim(),
+      website: values.website.trim(),
+      message: values.message.trim()
+    });
 
-    const isConfigured =
-      import.meta.env.VITE_SUPABASE_URL &&
-      import.meta.env.VITE_SUPABASE_URL !== 'https://your-project-id.supabase.co' &&
-      import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-    if (!isConfigured) {
-      console.warn('Supabase not configured. Simulating demo request:', {
-        name: values.fullName.trim(),
-        company: values.company.trim(),
-        email: values.email.trim(),
-        website: values.website.trim(),
-        message: values.message.trim()
-      });
-      setTimeout(() => {
-        setLoading(false);
-        setSuccess(true);
-      }, 1000);
-      return;
-    }
-
-    try {
-      const { supabase } = await import('../supabaseClient');
-      const { error: supabaseError } = await supabase
-        .from('demo_requests')
-        .insert([{
-          email: values.email.trim(),
-          name: values.fullName.trim(),
-          company: values.company.trim(),
-          website: values.website.trim(),
-          message: values.message.trim()
-        }]);
-
-      if (supabaseError) {
-        setErrors((prev) => ({ ...prev, form: supabaseError.message }));
-      } else {
-        setSuccess(true);
-      }
-    } catch (err) {
-      console.error('Demo request error:', err);
-      setErrors((prev) => ({ ...prev, form: 'Something went wrong. Please try again.' }));
-    } finally {
-      setLoading(false);
+    if (result.fields) {
+      setErrors((prev) => ({ ...prev, ...result.fields }));
     }
   };
 
-  if (success) {
+  if (sent) {
     return (
       <div>
         <section className={styles.hero}>
@@ -165,10 +138,23 @@ export default function DemoContact() {
           <div className={styles.grid}>
             <div className={styles.formColumn}>
               <h2 className={styles.formHeading}>Tell us about your website</h2>
-              <form onSubmit={handleSubmit} className={styles.form} noValidate>
+              <form onSubmit={handleSubmit} className={styles.form} noValidate aria-busy={submitting}>
                 <p className={styles.requiredNote}>
                   Fields marked with <span className={styles.asterisk}>*</span> are required.
                 </p>
+
+                <div className={styles.honeypot} aria-hidden="true">
+                  <label htmlFor="demo-fax-number">Fax number</label>
+                  <input
+                    id="demo-fax-number"
+                    name="fax_number"
+                    type="text"
+                    value={values.fax_number}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
 
                 <div className={styles.fieldGrid}>
                   <div className={styles.fieldGroup}>
@@ -277,10 +263,10 @@ export default function DemoContact() {
                   )}
                 </div>
 
-                {errors.form && <div className={styles.errorBox} role="alert">{errors.form}</div>}
+                {submitMessage && <div className={styles.errorBox} role="alert">{submitMessage}</div>}
 
-                <button type="submit" className={styles.submitButton} disabled={loading}>
-                  {loading ? 'Sending...' : 'Request Demo'}
+                <button type="submit" className={styles.submitButton} disabled={submitting}>
+                  {submitting ? 'Sending...' : 'Request Demo'}
                 </button>
               </form>
             </div>

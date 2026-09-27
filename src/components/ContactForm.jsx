@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ContactForm.module.css';
-import { supabase } from '../supabaseClient';
-import { SERVICE_OPTIONS, findServiceById } from '../data/services.js';
-
-const SERVICES = [...SERVICE_OPTIONS, 'Something else'];
+import useEnquirySubmit from '../hooks/useEnquirySubmit.js';
+import { SERVICE_CHOICES, findServiceById } from '../data/services.js';
 
 const CONTACT_METHODS = ['Email', 'Phone', 'No preference'];
 
@@ -70,7 +68,8 @@ const initialValues = {
   service: '',
   project: '',
   contactMethod: '',
-  details: ''
+  details: '',
+  fax_number: ''
 };
 
 export default function ContactForm({ params }) {
@@ -80,8 +79,7 @@ export default function ContactForm({ params }) {
     service: findServiceById(requestedService)?.name || ''
   }));
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const { submit, submitting, sent, message: submitMessage } = useEnquirySubmit();
 
   // Arriving from a service link on the services page fills the service field.
   // It never overwrites a choice the visitor has already made.
@@ -111,52 +109,28 @@ export default function ContactForm({ params }) {
       return;
     }
 
-    setLoading(true);
+    const trimmed = {
+      fullName: values.fullName.trim(),
+      company: values.company.trim(),
+      email: values.email.trim(),
+      phone: values.phone.trim(),
+      website: values.website.trim(),
+      service: values.service,
+      project: values.project.trim(),
+      contactMethod: values.contactMethod,
+      details: values.details.trim()
+    };
 
-    const isConfigured =
-      import.meta.env.VITE_SUPABASE_URL &&
-      import.meta.env.VITE_SUPABASE_URL !== 'https://your-project-id.supabase.co' &&
-      import.meta.env.VITE_SUPABASE_ANON_KEY;
+    // The honeypot is sent untouched. A person never fills it, so the function
+    // sees it empty and sends the enquiry on. A bot that fills it is filtered.
+    const result = await submit({ source: 'contact', fax_number: values.fax_number, ...trimmed });
 
-    const fullName = values.fullName.trim();
-    const email = values.email.trim();
-    const company = values.company.trim();
-
-    if (!isConfigured) {
-      console.warn('Supabase credentials not configured. Simulating local inquiry for:', {
-        name: fullName,
-        company,
-        email,
-        phone: values.phone.trim(),
-        service: values.service,
-        project: values.project.trim()
-      });
-      setTimeout(() => {
-        setLoading(false);
-        setSuccess(true);
-      }, 1000);
-      return;
-    }
-
-    try {
-      const { error: supabaseError } = await supabase
-        .from('waitlist')
-        .insert([{ email, name: fullName, company }]);
-
-      if (supabaseError) {
-        setErrors((prev) => ({ ...prev, form: supabaseError.message }));
-      } else {
-        setSuccess(true);
-      }
-    } catch (err) {
-      console.error('Submission error:', err);
-      setErrors((prev) => ({ ...prev, form: 'Something went wrong. Please try again.' }));
-    } finally {
-      setLoading(false);
+    if (result.fields) {
+      setErrors((prev) => ({ ...prev, ...result.fields }));
     }
   };
 
-  if (success) {
+  if (sent) {
     return (
       <div className={styles.successBox} role="status">
         <div className={styles.successTitle}>Message sent.</div>
@@ -169,10 +143,23 @@ export default function ContactForm({ params }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form} noValidate>
+    <form onSubmit={handleSubmit} className={styles.form} noValidate aria-busy={submitting}>
       <p className={styles.requiredNote}>
         Fields marked with <span className={styles.asterisk}>*</span> are required.
       </p>
+
+      <div className={styles.honeypot} aria-hidden="true">
+        <label htmlFor="fax_number">Fax number</label>
+        <input
+          id="fax_number"
+          name="fax_number"
+          type="text"
+          value={values.fax_number}
+          onChange={handleChange}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
 
       <div className={styles.fieldGrid}>
         <div className={styles.fieldGroup}>
@@ -294,7 +281,7 @@ export default function ContactForm({ params }) {
             aria-describedby={errors.service ? 'service-error' : undefined}
           >
             <option value="" disabled>Select a service</option>
-            {SERVICES.map((s) => (
+            {SERVICE_CHOICES.map((s) => (
               <option key={s} value={s}>{s}</option>
             ))}
           </select>
@@ -364,10 +351,10 @@ export default function ContactForm({ params }) {
         )}
       </div>
 
-      {errors.form && <div className={styles.errorBox} role="alert">{errors.form}</div>}
+      {submitMessage && <div className={styles.errorBox} role="alert">{submitMessage}</div>}
 
-      <button type="submit" className={styles.submitButton} disabled={loading}>
-        {loading ? 'Sending...' : 'Send Inquiry'}
+      <button type="submit" className={styles.submitButton} disabled={submitting}>
+        {submitting ? 'Sending...' : 'Send Inquiry'}
       </button>
     </form>
   );
