@@ -282,8 +282,8 @@ export default function DemoContact() {
 
               <div className={styles.infoCard}>
                 <h3 className={styles.infoTitle}>Email</h3>
-                <a href="mailto:contact@enmero.in" className={styles.infoLink}>
-                  contact@enmero.in
+                <a href="mailto:vorsped04@gmail.com" className={styles.infoLink}>
+                  vorsped04@gmail.com
                 </a>
               </div>
             </aside>
