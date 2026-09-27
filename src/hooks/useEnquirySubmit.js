@@ -8,7 +8,7 @@ import { useCallback, useRef, useState } from 'react';
 // "Sending" forever.
 const REQUEST_TIMEOUT_MS = 15000;
 
-const UNAVAILABLE = 'This form is temporarily unavailable. Please email vorsped04@gmail.com.';
+const UNAVAILABLE = 'This form is temporarily unavailable. Please email contact@enmero.in.';
 const FAILED = 'We could not send your message right now. Please try again.';
 
 export default function useEnquirySubmit() {
