@@ -41,7 +41,7 @@ export default function Footer() {
           <div className={styles.linkGroup}>
             <span className={styles.groupTitle}>Support</span>
             <a href="#/contact" className={styles.footerLink}>Get in touch</a>
-            <a href="mailto:vorsped04@gmail.com" className={styles.footerLink}>vorsped04@gmail.com</a>
+            <a href="mailto:contact@enmero.in" className={styles.footerLink}>contact@enmero.in</a>
           </div>
         </nav>
 
