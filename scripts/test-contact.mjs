@@ -162,6 +162,32 @@ describe('delivered enquiry types', () => {
     assert.equal(calls[0].sent.reply_to, 'asha@northwind.example');
   });
 
+  // The published inbox and the configured destination must stay the same place,
+  // so a visitor who emails directly and a visitor who uses a form both reach
+  // one inbox. This pins the value in .env.example.
+  test('enquiries go only to the published inbox, whatever the request asks for', async () => {
+    process.env.CONTACT_TO_EMAIL = 'vorsped04@gmail.com';
+    const calls = stubResend();
+
+    for (const body of [
+      validContact(),
+      validContact({ service: 'Something else' }),
+      validContact({ to: 'contact@enmero.in', cc: 'contact@enmero.in', bcc: 'contact@enmero.in' }),
+      validDemo()
+    ]) {
+      const res = response();
+      await handler(request({ body }), res);
+      assert.equal(res.statusCode, 200);
+    }
+
+    assert.equal(calls.length, 4);
+    for (const call of calls) {
+      assert.deepEqual(call.sent.to, ['vorsped04@gmail.com']);
+      // The old inbox must not survive anywhere in the outbound message.
+      assert.equal(JSON.stringify(call.sent).includes('contact@enmero.in'), false);
+    }
+  });
+
   test('the API key is only sent to Resend and never returned', async () => {
     const calls = stubResend();
     const res = response();
