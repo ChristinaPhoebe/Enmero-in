@@ -228,6 +228,8 @@
 }
 
 .tower {
+  position: relative;
+  z-index: 2;
   background-color: var(--color-brand-navy);
   border-left: 1px solid var(--color-border);
   border-right: 1px solid var(--color-border);
