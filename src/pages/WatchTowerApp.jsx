@@ -5,6 +5,7 @@ import WatchTower from './WatchTower.jsx';
 import { LEGAL_PAGES } from '../routes.js';
 import { ENMERO_URL, enmeroPage } from '../sites.js';
 import watchtowerLogo from '../../assets/logo/watchtower-logo.png';
+import watchtowerSymbol from '../../assets/logo/watchtower-symbol.png';
 
 const DEMO_URL = enmeroPage('/demo');
 
@@ -41,7 +42,7 @@ export default function WatchTowerApp() {
         <div className={styles.bar}>
           <div className={styles.brandGroup}>
             <a href="#top" className={styles.brand} onClick={goTop} aria-label="Watch Tower, back to the top">
-              <img src={watchtowerLogo} alt="Watch Tower" className={styles.brandMark} />
+              <img src={watchtowerSymbol} alt="Watch Tower" className={styles.brandMark} />
             </a>
             <nav className={styles.sectionNav} aria-label="Watch Tower sections">
               {SECTIONS.map((section) => (

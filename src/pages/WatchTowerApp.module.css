@@ -31,7 +31,7 @@
 .brandGroup {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 32px;
   min-width: 0;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .brandMark {
-  height: 32px;
+  height: 40px;
   width: auto;
 }
 
@@ -191,6 +191,10 @@
 
   .bar {
     padding: 0 20px;
+  }
+
+  .brandMark {
+    height: 38px;
   }
 
   .footerBar {
