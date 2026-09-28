@@ -35,11 +35,11 @@ const validate = (values) => {
     }
   }
 
-  if (!values.message.trim()) {
-    errors.message = 'Please tell us a little about your website.';
-  } else if (errors.message && errors.message.length > 1000) {
-    errors.message = 'Please keep the message under 1000 characters.';
-  }
+  // The label marks this field optional, so it is only length checked. A demo
+  // request is already actionable from the name, company, email and website,
+  // and making someone write prose to reach the highest intent action on the
+  // site costs bookings for no gain.
+  if (values.message.length > 1000) errors.message = 'Please keep the message under 1000 characters.';
 
   return errors;
 };
