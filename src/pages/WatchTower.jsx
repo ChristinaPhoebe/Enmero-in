@@ -109,18 +109,33 @@ const ROUTES = [
   { state: 'stopped', label: 'Stopped at the protection layer' }
 ];
 
-const READINGS = [
+// Placed around the globe as technical annotations. Each line is already said
+// elsewhere on the page: the readings, the request steps and the protection
+// claims. Nothing here adds a new capability or a metric.
+const CALLOUTS = [
   {
+    id: 'traffic',
+    label: 'Traffic',
+    title: 'Incoming requests',
+    desc: 'Every request arrives here first, from wherever the visitor is.'
+  },
+  {
+    id: 'inspection',
+    label: 'Inspection',
     title: 'Read on arrival',
-    desc: 'Method, path, headers, and request rate are read as the request arrives, before anything reaches your server.'
+    desc: 'Method, path, headers, and request rate are read before anything reaches your server.'
   },
   {
+    id: 'protection',
+    label: 'Protection',
     title: 'Decided in one place',
-    desc: 'Firewall rules, bot checks, and rate limits all run at the protection layer rather than inside your application.'
+    desc: 'Firewall rules, bot checks, and rate limits run at the protection layer.'
   },
   {
+    id: 'secure',
+    label: 'Secure',
     title: 'Forwarded unchanged',
-    desc: 'Traffic that passes is delivered to your website over HTTPS, in the same way it was before.'
+    desc: 'Traffic that passes is delivered to your website over HTTPS.'
   }
 ];
 
@@ -250,7 +265,24 @@ export default function WatchTower() {
             </p>
           </div>
 
-          <Globe />
+          <Globe>
+            {CALLOUTS.map((callout, index) => (
+              <aside
+                key={callout.id}
+                className={`${styles.callout} ${styles[`callout${index + 1}`]}`}
+                aria-labelledby={`wt-callout-${callout.id}`}
+              >
+                <span className={styles.calloutIndex} aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <p className={styles.calloutLabel}>{callout.label}</p>
+                <h3 className={styles.calloutTitle} id={`wt-callout-${callout.id}`}>
+                  {callout.title}
+                </h3>
+                <p className={styles.calloutDesc}>{callout.desc}</p>
+              </aside>
+            ))}
+          </Globe>
 
           <ul className={styles.routeLegend} data-reveal>
             {ROUTES.map((route) => (
@@ -263,15 +295,6 @@ export default function WatchTower() {
               </li>
             ))}
           </ul>
-
-          <dl className={styles.readings} data-reveal>
-            {READINGS.map((reading) => (
-              <div key={reading.title} className={styles.reading}>
-                <dt className={styles.readingTitle}>{reading.title}</dt>
-                <dd className={styles.readingDesc}>{reading.desc}</dd>
-              </div>
-            ))}
-          </dl>
         </div>
       </section>
 
@@ -429,7 +452,7 @@ export default function WatchTower() {
         <div className={`${styles.container} container`}>
           <div className={styles.layerLayout}>
             <div className={styles.layerIntro} data-reveal>
-              <p className={styles.darkEyebrow}>Capabilities</p>
+              <p className={`${styles.darkEyebrow} ${styles.layerEyebrow}`}>Capabilities</p>
               <h2 className={styles.layerTitle} id="wt-capabilities-title">
                 What the protection layer handles
               </h2>

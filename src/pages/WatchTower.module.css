@@ -270,7 +270,7 @@
 
 .globeHead {
   max-width: 900px;
-  margin: 0 auto;
+  margin: 0 auto 64px;
   text-align: center;
 }
 
@@ -329,37 +329,186 @@
   background-color: var(--globe-stopped);
 }
 
-.readings {
-  max-width: 1200px;
-  margin: 84px auto 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid var(--wt-dark-line);
+/* Floating annotations on the globe.
+
+   These are annotations of the sphere rather than cards beside it, so they sit
+   over the dark field at four uneven anchors, keep a leader line pointing back
+   at the sphere, and use one hairline language with the legend above. Corner
+   radius stays at zero, matching every other ruled element on the page. */
+
+.callout {
+  position: absolute;
+  z-index: 2;
+  width: 218px;
+  padding: 15px 17px 16px;
+  border: 1px solid var(--wt-dark-line);
+  border-left: 1px solid rgba(95, 216, 182, 0.5);
+  background-color: rgba(5, 17, 23, 0.72);
+  pointer-events: auto;
 }
 
-.reading {
-  padding: 30px 34px 0;
-  border-left: 1px solid var(--wt-dark-line);
+/* The leader line. It leaves the inner edge of the box on an angle toward the
+   sphere and ends in a small mark, so it reads as a pointer at the globe rather
+   than as a stray rule. Each part pivots about the end that is attached to the
+   box, which is what keeps the mark on the end of the line instead of swinging
+   it away from the globe. */
+.callout::before {
+  content: '';
+  position: absolute;
+  top: 22px;
+  width: 76px;
+  height: 1px;
+  background-color: rgba(95, 216, 182, 0.34);
+  transform-origin: left center;
 }
 
-.reading:first-child {
-  padding-left: 0;
-  border-left: none;
+.callout::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  width: 5px;
+  height: 5px;
+  border: 1px solid rgba(95, 216, 182, 0.5);
+  background-color: var(--wt-ink);
+  transform-origin: left center;
+  transform: rotate(21deg) translateX(73px);
 }
 
-.readingTitle {
-  font-family: var(--font-sans);
-  font-size: 18px;
+.callout1,
+.callout3 {
+  left: 0;
+}
+
+.callout2,
+.callout4 {
+  right: 0;
+}
+
+.callout1::before,
+.callout3::before {
+  left: 100%;
+  transform: rotate(21deg);
+}
+
+.callout2::before,
+.callout4::before {
+  left: auto;
+  right: 100%;
+  transform-origin: right center;
+  transform: rotate(-21deg);
+}
+
+.callout2::after,
+.callout4::after {
+  left: auto;
+  right: 100%;
+  transform-origin: right center;
+  transform: rotate(-21deg) translateX(-73px);
+}
+
+/* The upper pair sits where the sphere has narrowed, so their leaders run
+   further to reach the limb. The lower pair is already level with the widest
+   part of the globe and needs only a short mark. */
+.callout1::before,
+.callout2::before {
+  width: 116px;
+}
+
+.callout1::after,
+.callout2::after {
+  transform-origin: left center;
+}
+
+.callout2::after {
+  transform: rotate(-21deg) translateX(-113px);
+}
+
+.callout1::after {
+  transform: rotate(21deg) translateX(113px);
+}
+
+.callout1 {
+  top: 2%;
+}
+
+.callout2 {
+  top: 20%;
+  width: 198px;
+}
+
+.callout3 {
+  top: 52%;
+  width: 232px;
+}
+
+.callout4 {
+  top: 68%;
+  width: 206px;
+}
+
+.calloutIndex {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: rgba(95, 216, 182, 0.62);
+  margin-bottom: 9px;
+}
+
+.calloutLabel {
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: -0.012em;
-  color: #ffffff;
-  margin-bottom: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wt-teal-300);
+  margin-bottom: 7px;
 }
 
-.readingDesc {
-  font-size: 15.5px;
-  line-height: 1.55;
-  color: var(--wt-dark-body);
+.calloutTitle {
+  font-family: var(--font-sans);
+  font-size: 16.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.calloutDesc {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--wt-dark-muted);
+}
+
+/* A slow fade keeps the annotations present without pulling focus off the
+   sphere. The offsets are short enough that the group still reads as one
+   fixed diagram rather than four floating objects. */
+.callout {
+  animation: callout-in 900ms ease both;
+}
+
+.callout1 {
+  animation-delay: 120ms;
+}
+
+.callout2 {
+  animation-delay: 220ms;
+}
+
+.callout3 {
+  animation-delay: 320ms;
+}
+
+.callout4 {
+  animation-delay: 420ms;
+}
+
+@keyframes callout-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ---------- Blocks ---------- */
@@ -852,7 +1001,7 @@
 
 .layerSection {
   position: relative;
-  padding: 128px 0 132px;
+  padding: 64px 0 68px;
   background-color: var(--wt-teal-800);
   scroll-margin-top: 92px;
 }
@@ -874,78 +1023,137 @@
 .layerLayout {
   max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: 72px;
-  align-items: start;
 }
 
+/* The heading sits across the top with the supporting copy set to its right, so
+   the block ends where the copy ends instead of running the height of the list
+   beside it. */
 .layerIntro {
-  max-width: 520px;
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+  column-gap: 56px;
+  row-gap: 18px;
+  align-items: end;
+}
+
+.layerEyebrow {
+  grid-column: 1;
+  grid-row: 1;
+  margin-bottom: 0;
 }
 
 .layerTitle {
+  grid-column: 1;
+  grid-row: 2;
   font-family: var(--font-sans);
-  font-size: 52px;
+  font-size: 42px;
   font-weight: 500;
   letter-spacing: -0.028em;
-  line-height: 1.04;
+  line-height: 1.06;
   color: #ffffff;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   text-wrap: balance;
 }
 
 .layerLead {
-  font-size: 17px;
-  line-height: 1.6;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: end;
+  font-size: 16.5px;
+  line-height: 1.55;
   color: var(--wt-dark-body);
-  max-width: 440px;
+  max-width: 520px;
   text-wrap: pretty;
 }
 
+/* Six capabilities read as one continuous specification: a numbered label, the
+   capability, and what it does, all on one line of type across the full width.
+   Row height is set by the description, not by a fixed value. */
 .layers {
   list-style: none;
-  display: flex;
-  flex-direction: column;
+  margin: 44px 0 0;
+  padding: 0;
 }
 
 .layer {
+  position: relative;
   display: grid;
-  grid-template-columns: 108px minmax(0, 1fr);
-  column-gap: 26px;
-  row-gap: 7px;
-  padding: 24px 0;
+  grid-template-columns: 104px minmax(0, 0.42fr) minmax(0, 1fr);
+  column-gap: 28px;
+  align-items: start;
+  padding: 16px 0 16px 16px;
   border-top: 1px solid var(--wt-dark-line);
+  transition: background-color 0.22s ease, border-color 0.22s ease;
 }
 
-.layer:last-child {
+.layers > .layer:last-child {
   border-bottom: 1px solid var(--wt-dark-line);
+}
+
+/* A hairline of accent in the left margin marks the row under the pointer. */
+.layer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background-color: var(--wt-teal-300);
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+@media (hover: hover) {
+  .layer:hover {
+    background-color: rgba(31, 169, 140, 0.05);
+    border-top-color: var(--wt-teal-500);
+  }
+
+  .layer:hover::before {
+    opacity: 0.75;
+    transform: scaleY(1);
+  }
+
+  .layer:hover .layerName {
+    color: var(--wt-teal-200);
+  }
 }
 
 .layerLabel {
   grid-column: 1;
-  grid-row: 1 / span 2;
+  grid-row: 1;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 12px;
   letter-spacing: 0.06em;
   color: var(--wt-teal-300);
-  padding-top: 4px;
+  font-variant-numeric: tabular-nums;
+  padding-top: 6px;
+  transition: color 0.22s ease;
+}
+
+.layer:hover .layerLabel {
+  color: var(--wt-teal-200);
 }
 
 .layerName {
   grid-column: 2;
+  grid-row: 1;
   font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 500;
   letter-spacing: -0.018em;
   line-height: 1.2;
   color: #ffffff;
+  transition: color 0.22s ease;
 }
 
 .layerDesc {
-  grid-column: 2;
-  font-size: 15.5px;
-  line-height: 1.6;
+  grid-column: 3;
+  grid-row: 1;
+  font-size: 15px;
+  line-height: 1.5;
   color: var(--wt-dark-body);
 }
 
@@ -1077,7 +1285,62 @@
 
 /* ---------- Responsive ---------- */
 
+/* The globe narrows faster than the callouts do, so the annotations are trimmed
+   before the sphere would start running underneath them. */
+@media (max-width: 1240px) {
+  .callout {
+    width: 188px;
+    padding: 13px 14px 14px;
+  }
+
+  .callout2 {
+    width: 176px;
+  }
+
+  .callout3 {
+    width: 198px;
+  }
+
+  .callout4 {
+    width: 180px;
+  }
+
+  .callout::before {
+    width: 56px;
+  }
+
+  .callout::after {
+    transform: rotate(21deg) translateX(53px);
+  }
+
+  .callout1::before,
+  .callout2::before {
+    width: 84px;
+  }
+
+  .callout1::after {
+    transform: rotate(21deg) translateX(81px);
+  }
+
+  .callout2::after {
+    transform: rotate(-21deg) translateX(-81px);
+  }
+
+  .callout2::after,
+  .callout4::after {
+    transform: rotate(-21deg) translateX(-53px);
+  }
+}
+
 @media (max-width: 1080px) {
+  .globeSection {
+    padding: 104px 0 88px;
+  }
+
+  .globeHead {
+    margin-bottom: 48px;
+  }
+
   .flow {
     grid-template-columns: minmax(0, 1fr) 72px minmax(0, 1fr);
   }
@@ -1119,16 +1382,23 @@
     left: 0;
   }
 
-  .layerLayout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 52px;
-  }
-
   .layerIntro {
+    grid-template-columns: minmax(0, 1fr);
     max-width: none;
   }
 
+  .layerEyebrow {
+    grid-row: 1;
+  }
+
+  .layerTitle {
+    grid-row: 2;
+  }
+
   .layerLead {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: start;
     max-width: 640px;
   }
 }
@@ -1138,26 +1408,59 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .readings {
-    grid-template-columns: minmax(0, 1fr);
-    margin-top: 64px;
+  /* Narrow screens cannot flank the sphere without crowding it, so the
+     annotations stop being an overlay and become a stack under the globe. The
+     leader line turns vertical and points back up at the sphere, which keeps
+     the relationship to the globe instead of turning the group into a card
+     grid. */
+  .callout,
+  .callout1,
+  .callout2,
+  .callout3,
+  .callout4 {
+    position: relative;
+    top: auto;
+    right: auto;
+    left: auto;
+    width: auto;
+    padding: 15px 16px 16px 40px;
+    border-left: 1px solid var(--wt-dark-line);
   }
 
-  .reading {
-    padding: 24px 0;
-    border-left: none;
-    border-top: 1px solid var(--wt-dark-line);
+  .callout::before {
+    top: -16px;
+    left: 19px;
+    right: auto;
+    width: 1px;
+    height: 16px;
+    transform: none;
   }
 
-  .reading:first-child {
-    padding-top: 28px;
-    border-top: none;
+  .callout::after {
+    top: -19px;
+    left: 16px;
+    right: auto;
+    transform: none;
+  }
+
+  .callout1,
+  .callout3 {
+    animation-delay: 120ms;
+  }
+
+  .callout2,
+  .callout4 {
+    animation-delay: 220ms;
   }
 }
 
 @media (max-width: 768px) {
   .container {
     padding: 0 20px;
+  }
+
+  .globeHead {
+    margin-bottom: 34px;
   }
 
   .hero {
@@ -1329,11 +1632,7 @@
   }
 
   .layerSection {
-    padding: 84px 0 88px;
-  }
-
-  .layerLayout {
-    gap: 40px;
+    padding: 60px 0 64px;
   }
 
   .layerTitle {
@@ -1342,28 +1641,35 @@
   }
 
   .layerLead {
-    font-size: 16.5px;
+    font-size: 16px;
   }
 
+  /* Tablet keeps the numbered label in the margin and moves the description
+     under the capability name. */
   .layer {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 6px;
-    padding: 22px 0;
+    grid-template-columns: 92px minmax(0, 1fr);
+    column-gap: 20px;
+    row-gap: 4px;
+    padding: 16px 0 16px 12px;
   }
 
   .layerLabel {
     grid-column: 1;
-    grid-row: auto;
-    padding-top: 0;
+    grid-row: 1;
+    padding-top: 5px;
   }
 
   .layerName {
-    grid-column: 1;
+    grid-column: 2;
+    grid-row: 1;
     font-size: 20px;
   }
 
   .layerDesc {
-    grid-column: 1;
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 14.5px;
+    line-height: 1.5;
   }
 
   .ctaBlock {
@@ -1390,6 +1696,51 @@
   }
 }
 
+@media (max-width: 560px) {
+  .layerSection {
+    padding: 52px 0 56px;
+  }
+
+  .layerIntro {
+    row-gap: 16px;
+  }
+
+  .layerTitle {
+    font-size: 30px;
+  }
+
+  .layers {
+    margin-top: 34px;
+  }
+
+  /* Narrow screens stack the label, name, and description so the measure stays
+     as wide as the screen allows. */
+  .layer {
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
+    row-gap: 4px;
+    padding: 16px 0 16px 12px;
+  }
+
+  .layerLabel {
+    grid-column: 1;
+    grid-row: 1;
+    padding-top: 0;
+  }
+
+  .layerName {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 20px;
+  }
+
+  .layerDesc {
+    grid-column: 1;
+    grid-row: 3;
+    font-size: 14.5px;
+  }
+}
+
 @media (max-width: 400px) {
   .heroTitle {
     font-size: 32px;
@@ -1409,6 +1760,10 @@
 
   .layerTitle {
     font-size: 29px;
+  }
+
+  .layerDesc {
+    font-size: 14px;
   }
 
   .ctaTitle {
@@ -1460,6 +1815,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .callout,
   .packetOk,
   .packetBlocked,
   .stepNode::after {
@@ -1469,6 +1825,13 @@
   [data-reveal] {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .layer,
+  .layer::before,
+  .layerName,
+  .layerLabel {
     transition: none;
   }
 }

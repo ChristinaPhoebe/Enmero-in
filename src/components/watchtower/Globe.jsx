@@ -92,7 +92,7 @@ function buildDots(stride) {
   return toFixed(samples);
 }
 
-export default function Globe() {
+export default function Globe({ children }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export default function Globe() {
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      radius = Math.min(width, height) * 0.43;
+      radius = Math.min(width, height) * 0.47;
       // A rim glow rather than a filled pool. A gradient that is opaque across
       // the middle of the disc reads as a solid teal circle and swallows the
       // dot field, so the colour is kept to a narrow band around the limb.
@@ -542,14 +542,20 @@ export default function Globe() {
   }, []);
 
   return (
-    <div className={styles.stage}>
-      <canvas
-        ref={canvasRef}
-        className={styles.canvas}
-        role="img"
-        aria-label="A globe showing requests arriving from many parts of the world and being inspected at a single protection layer, where some continue to the website and others stop."
-      />
-      <p className={styles.hint} aria-hidden="true">Drag to rotate</p>
+    <div className={styles.frame}>
+      <div className={styles.stage}>
+        <canvas
+          ref={canvasRef}
+          className={styles.canvas}
+          role="img"
+          aria-label="A globe showing requests arriving from many parts of the world and being inspected at a single protection layer, where some continue to the website and others stop."
+        />
+        <p className={styles.hint} aria-hidden="true">Drag to rotate</p>
+      </div>
+      {/* Annotations have to be positioned against the sphere, so the frame owns
+          the positioning context. Wide screens lay them over the dark field
+          around the globe; narrow screens let them fall below it in the flow. */}
+      {children ? <div className={styles.annotations}>{children}</div> : null}
     </div>
   );
 }

@@ -1,12 +1,20 @@
 /* Globe stage. The sphere is square and centred, so the stage is sized from its
    height and the width simply gives the dark field around it. The canvas also
    carries the palette, because the drawing code reads these values back out
-   rather than keeping a second copy of the colours in JavaScript. */
+   rather than keeping a second copy of the colours in JavaScript.
+
+   The frame is the positioning context for the annotations. It has no height of
+   its own: on wide screens the annotations sit over it, and on narrow screens
+   they fall into the normal flow underneath the stage. */
+
+.frame {
+  position: relative;
+}
 
 .stage {
   position: relative;
   width: 100%;
-  height: clamp(300px, 42vw, 600px);
+  height: clamp(340px, 46vw, 660px);
   margin: 0 auto;
 }
 
@@ -24,6 +32,17 @@
   cursor: grabbing;
 }
 
+/* Slot for annotations placed on the sphere. Wide screens cover the frame so
+   callouts can sit over the dark field, but stay transparent to the pointer so
+   the canvas underneath can still be dragged from any part of it. The callouts
+   themselves opt back in. Narrow screens drop the overlay entirely and let the
+   annotations read as a block under the globe. */
+.annotations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .hint {
   position: absolute;
   left: 0;
@@ -38,7 +57,22 @@
 
 @media (max-width: 900px) {
   .stage {
-    height: clamp(280px, 62vw, 420px);
+    height: clamp(300px, 68vw, 460px);
+  }
+
+  .annotations {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 560px) {
+  .annotations {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
   }
 }
 
