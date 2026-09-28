@@ -102,7 +102,7 @@ export default function WatchTowerApp() {
           <div className={styles.footerIdentity}>
             <img src={watchtowerLogo} alt="Watch Tower" className={styles.footerMark} />
             <p className={styles.footerNote}>
-              Watch Tower is a product by{' '}
+              is a product by{' '}
               <a href={ENMERO_URL} className={styles.footerLink}>
                 Enmero
               </a>
