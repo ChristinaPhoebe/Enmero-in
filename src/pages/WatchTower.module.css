@@ -621,14 +621,6 @@
   pointer-events: none;
 }
 
-.ctaChip {
-  position: relative;
-  width: 8px;
-  height: 8px;
-  background-color: var(--color-brand-lime);
-  margin-bottom: 30px;
-}
-
 .ctaTitle {
   position: relative;
   font-family: var(--font-sans);

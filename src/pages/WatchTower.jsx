@@ -381,7 +381,6 @@ export default function WatchTower() {
       <section className={styles.ctaBlock} id="wt-request-demo">
         <div className={`${styles.container} container`}>
           <div className={styles.ctaPanel} data-reveal>
-            <span className={styles.ctaChip} aria-hidden="true" />
             <h2 className={styles.ctaTitle}>See Watch Tower in front of your site</h2>
             <p className={styles.ctaDesc}>
               Request a demo and we will walk through how traffic is inspected, filtered, and
