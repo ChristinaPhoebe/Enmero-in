@@ -76,11 +76,12 @@ export default function Hero() {
         {/* Left Column: Text Content */}
         <div className={styles.leftCol}>
           <h1 className={styles.title}>
-            Technology consultancy{' '}
+            We{' '}
             <span className={styles.highlight}>
               <span className={styles.highlightBg} />
-              that builds
-            </span>
+              build
+            </span>{' '}
+            what moves businesses forward.
           </h1>
           <p className={styles.subtitle}>
             Enmero builds software, web applications, and digital products. We combine engineering discipline with strong design to deliver work we are proud of.
