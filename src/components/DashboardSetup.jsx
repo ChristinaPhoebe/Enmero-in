@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './DashboardSetup.module.css';
-import logo from '../../assets/lockersea_logo.png';
 import { 
   LayoutDashboard, Clock, Bot, FileText, TrendingUp, GitBranch, 
   Globe, Mail, Activity, Lock, Key, Zap, Database, Cpu, ListTodo, 
@@ -343,7 +342,6 @@ export default function DashboardSetup({ fullscreen, onLogout }) {
       {/* 1. Top Header Bar */}
       <header className={`${styles.headerBar} ${tourStep === 1 ? styles.tourHighlighted : ''}`}>
         <div className={styles.headerLeft}>
-          <img src={logo} alt="enmero Logo" className={styles.logoImage} />
           <span className={styles.logoText}>enmero console</span>
           <div className={styles.domainSelector}>
             <span className={styles.domainName}>enmero.com</span>

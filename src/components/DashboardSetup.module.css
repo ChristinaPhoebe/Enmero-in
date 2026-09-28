@@ -44,12 +44,6 @@
   align-items: center;
 }
 
-.logoImage {
-  height: 20px;
-  width: auto;
-  margin-right: 8px;
-}
-
 .logoText {
   font-size: 14px;
   font-weight: 700;
