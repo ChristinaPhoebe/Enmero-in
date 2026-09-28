@@ -177,10 +177,7 @@ export default function WatchTower() {
         <div className={`${styles.container} container`}>
           <div className={styles.heroInner} data-reveal>
             <img src={watchtowerLogo} alt="Watch Tower" className={styles.heroMark} />
-            <span className={styles.eyebrow}>
-              <span className={styles.eyebrowDot} aria-hidden="true" />
-              enmero product
-            </span>
+            <span className={styles.eyebrow}>enmero product</span>
             <h1 className={styles.heroTitle}>A protection layer in front of your website</h1>
             <p className={styles.heroSubtitle}>
               Watch Tower sits between your visitors and your server. Every request is inspected,
