@@ -552,6 +552,22 @@
     height: 240px;
   }
 
+  /* The two columns of pills are placed by percentage, but a pill's width comes
+     from its text, so a narrow card can be too small to hold two of them side by
+     side. At 320px the columns overlap by a few pixels and the outer one is
+     clipped by the card. The chat panel is anchored to the bottom and grows
+     taller as the card narrows, which pushed it up into the loading pill above
+     it at every width up to 430px. Both cards are given the room they need
+     below: the pills now wrap instead of running past their column, which makes
+     them taller, so the rows need the height as well. All three cards are kept
+     at one height, because the row height follows the card, and a card that
+     changed height between slides moved the whole row under the reader. */
+  .blueCard,
+  .greenCard,
+  .orangeCard {
+    height: 300px;
+  }
+
   .chatCardMock {
     width: 78%;
     max-width: 220px;
@@ -561,6 +577,12 @@
   .floatingPill {
     font-size: 11px;
     padding: 7px 11px;
+    /* Capping the width to a share of the card lets a long label wrap instead
+       of running past its column, which keeps the grid intact at every width
+       rather than only the ones it was tuned for. */
+    max-width: 46%;
+    white-space: normal;
+    text-align: center;
   }
 
   .pillVisitor {
