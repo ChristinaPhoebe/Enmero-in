@@ -166,7 +166,7 @@ describe('delivered enquiry types', () => {
   // so a visitor who emails directly and a visitor who uses a form both reach
   // one inbox. This pins the value in .env.example.
   test('enquiries go only to the published inbox, whatever the request asks for', async () => {
-    process.env.CONTACT_TO_EMAIL = 'vorsped04@gmail.com';
+    process.env.CONTACT_TO_EMAIL = 'ashwanthkrishana233@gmail.com';
     const calls = stubResend();
 
     for (const body of [
@@ -182,7 +182,7 @@ describe('delivered enquiry types', () => {
 
     assert.equal(calls.length, 4);
     for (const call of calls) {
-      assert.deepEqual(call.sent.to, ['vorsped04@gmail.com']);
+      assert.deepEqual(call.sent.to, ['ashwanthkrishana233@gmail.com']);
       // The old inbox must not survive anywhere in the outbound message.
       assert.equal(JSON.stringify(call.sent).includes('contact@enmero.in'), false);
     }

@@ -1,6 +1,7 @@
 .navbar {
+  --nav-height: 70px;
   width: 100%;
-  height: 70px;
+  height: var(--nav-height);
   background-color: transparent;
   position: fixed;
   top: 0;
@@ -97,6 +98,99 @@
   opacity: 0.8;
 }
 
+.navLink:focus-visible {
+  color: var(--color-text-primary);
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Products dropdown. The wrapper spans the full navbar height so the panel can
+   hang from the navbar's bottom edge rather than from the centred label. */
+.products {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--nav-height);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.productsMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: -12px;
+  width: max-content;
+  min-width: 188px;
+  padding: 6px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  /* Hidden rather than removed so opening causes no layout shift. */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+}
+
+.productsMenuOpen {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s;
+}
+
+.productLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--border-radius-small);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.productLink:hover,
+.productLink:focus-visible {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+.productLink:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: -2px;
+}
+
+.productLogo {
+  height: 16px;
+  width: auto;
+  object-fit: contain;
+}
+
+.productName {
+  flex: 1;
+  white-space: nowrap;
+}
+
+.productArrow {
+  color: var(--color-text-tertiary);
+  transition: color 0.15s ease;
+}
+
+.productLink:hover .productArrow,
+.productLink:focus-visible .productArrow {
+  color: var(--color-text-primary);
+}
+
 /* Scrolled Navbar Theme Transitions */
 .navbar.scrolled {
   background-color: rgba(255, 255, 255, 0.9);
@@ -162,10 +256,10 @@
 
   .menuMobile {
     position: absolute;
-    top: 70px;
+    top: var(--nav-height);
     left: 0;
     width: 100%;
-    max-height: calc(100vh - 70px);
+    max-height: calc(100vh - var(--nav-height));
     overflow-y: auto;
     overscroll-behavior: contain;
     background-color: rgba(255, 255, 255, 0.96);
@@ -190,5 +284,52 @@
     align-items: center;
     gap: 4px;
     text-align: left;
+  }
+
+  /* Products sits in the flow of the mobile menu and expands in place, so it
+     never becomes a desktop style popover on a narrow screen. */
+  .mobileProductsToggle {
+    justify-content: space-between;
+  }
+
+  .mobileProducts {
+    display: flex;
+    flex-direction: column;
+    padding: 2px 0 6px 12px;
+    border-left: 1px solid var(--color-border);
+    margin-left: 2px;
+  }
+
+  .mobileProductLink {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 6px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+
+  .mobileProductLink:hover,
+  .mobileProductLink:focus-visible {
+    color: var(--color-text-primary);
+  }
+
+  .mobileProductLink:focus-visible {
+    outline: 2px solid var(--color-text-primary);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .productsMenu {
+    transform: none;
+    transition: visibility 0s linear 0.18s;
+  }
+
+  .productsMenuOpen {
+    transform: none;
+    transition: visibility 0s;
   }
 }

@@ -65,7 +65,7 @@ const MESSAGES = {
   unreadable: 'The request could not be read. Please refresh the page and try again.',
   fields: 'Please check the highlighted fields and try again.',
   rateLimited: 'Too many messages were sent from this device. Please wait a few minutes and try again.',
-  unconfigured: 'This form is temporarily unavailable. Please email vorsped04@gmail.com.',
+  unconfigured: 'This form is temporarily unavailable. Please email ashwanthkrishana233@gmail.com.',
   undeliverable: 'Your message could not be sent right now. Please try again shortly.'
 };
 
