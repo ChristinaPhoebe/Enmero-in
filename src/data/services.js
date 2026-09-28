@@ -172,8 +172,9 @@ export const ALL_SERVICES = [...SERVICES, WATCHTOWER_SERVICE];
 
 export const SERVICE_OPTIONS = ALL_SERVICES.map((service) => service.name);
 
-// The contact form offers a catch-all choice alongside the real services. It is
-// shared with the contact function so both sides agree on the exact wording.
+// The contact form offers a catch-all choice alongside the real services. It
+// decides whether an enquiry counts as a general contact or a service enquiry,
+// so it is read from here rather than spelled out in the form.
 export const GENERAL_ENQUIRY_OPTION = 'Something else';
 
 export const SERVICE_CHOICES = [...SERVICE_OPTIONS, GENERAL_ENQUIRY_OPTION];

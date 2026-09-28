@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './DemoContact.module.css';
 import useEnquirySubmit from '../hooks/useEnquirySubmit.js';
 import { WATCHTOWER_SERVICE } from '../data/services.js';
+import { ENQUIRY_TYPES, withoutBlanks } from '../data/forms.js';
 import { WATCHTOWER_URL } from '../sites.js';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -49,7 +50,7 @@ const initialValues = {
   email: '',
   website: '',
   message: '',
-  fax_number: ''
+  _gotcha: ''
 };
 
 export default function DemoContact() {
@@ -75,22 +76,20 @@ export default function DemoContact() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    // The honeypot is sent untouched. A person never fills it, so the function
-    // sees it empty and sends the request on. A bot that fills it is filtered.
-    const result = await submit({
-      source: 'demo',
-      product: WATCHTOWER_SERVICE.name,
-      fax_number: values.fax_number,
-      fullName: values.fullName.trim(),
-      company: values.company.trim(),
-      email: values.email.trim(),
-      website: values.website.trim(),
-      message: values.message.trim()
+    await submit({
+      formType: ENQUIRY_TYPES.DEMO,
+      honeypot: values._gotcha,
+      ...withoutBlanks({
+        Name: values.fullName.trim(),
+        Email: values.email.trim(),
+        Company: values.company.trim(),
+        Website: values.website.trim(),
+        // The product the request is about, so a demo enquiry is not mistaken
+        // for a general one when it reaches the inbox.
+        Product: WATCHTOWER_SERVICE.name,
+        Message: values.message.trim()
+      })
     });
-
-    if (result.fields) {
-      setErrors((prev) => ({ ...prev, ...result.fields }));
-    }
   };
 
   if (sent) {
@@ -145,12 +144,12 @@ export default function DemoContact() {
                 </p>
 
                 <div className={styles.honeypot} aria-hidden="true">
-                  <label htmlFor="demo-fax-number">Fax number</label>
+                  <label htmlFor="demo-gotcha">Fax number</label>
                   <input
-                    id="demo-fax-number"
-                    name="fax_number"
+                    id="demo-gotcha"
+                    name="_gotcha"
                     type="text"
-                    value={values.fax_number}
+                    value={values._gotcha}
                     onChange={handleChange}
                     tabIndex={-1}
                     autoComplete="off"

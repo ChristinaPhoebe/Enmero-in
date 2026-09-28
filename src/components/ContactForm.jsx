@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ContactForm.module.css';
 import useEnquirySubmit from '../hooks/useEnquirySubmit.js';
-import { SERVICE_CHOICES, findServiceById } from '../data/services.js';
+import { SERVICE_CHOICES, GENERAL_ENQUIRY_OPTION, findServiceById } from '../data/services.js';
+import { ENQUIRY_TYPES, withoutBlanks } from '../data/forms.js';
 
 const CONTACT_METHODS = ['Email', 'Phone', 'No preference'];
 
@@ -69,7 +70,7 @@ const initialValues = {
   project: '',
   contactMethod: '',
   details: '',
-  fax_number: ''
+  _gotcha: ''
 };
 
 export default function ContactForm({ params }) {
@@ -109,25 +110,27 @@ export default function ContactForm({ params }) {
       return;
     }
 
-    const trimmed = {
-      fullName: values.fullName.trim(),
-      company: values.company.trim(),
-      email: values.email.trim(),
-      phone: values.phone.trim(),
-      website: values.website.trim(),
-      service: values.service,
-      project: values.project.trim(),
-      contactMethod: values.contactMethod,
-      details: values.details.trim()
-    };
+    // This one form serves both enquiries. Picking the catch all service means
+    // the visitor is not asking about a specific service, which is the general
+    // enquiry; any real service makes it a service enquiry.
+    const formType =
+      values.service === GENERAL_ENQUIRY_OPTION ? ENQUIRY_TYPES.GENERAL : ENQUIRY_TYPES.SERVICE;
 
-    // The honeypot is sent untouched. A person never fills it, so the function
-    // sees it empty and sends the enquiry on. A bot that fills it is filtered.
-    const result = await submit({ source: 'contact', fax_number: values.fax_number, ...trimmed });
-
-    if (result.fields) {
-      setErrors((prev) => ({ ...prev, ...result.fields }));
-    }
+    await submit({
+      formType,
+      honeypot: values._gotcha,
+      ...withoutBlanks({
+        Name: values.fullName.trim(),
+        Email: values.email.trim(),
+        Company: values.company.trim(),
+        Phone: values.phone.trim(),
+        Website: values.website.trim(),
+        Service: values.service,
+        'Project description': values.project.trim(),
+        'Preferred contact method': values.contactMethod,
+        'Additional details': values.details.trim()
+      })
+    });
   };
 
   if (sent) {
@@ -149,12 +152,12 @@ export default function ContactForm({ params }) {
       </p>
 
       <div className={styles.honeypot} aria-hidden="true">
-        <label htmlFor="fax_number">Fax number</label>
+        <label htmlFor="contact-gotcha">Fax number</label>
         <input
-          id="fax_number"
-          name="fax_number"
+          id="contact-gotcha"
+          name="_gotcha"
           type="text"
-          value={values.fax_number}
+          value={values._gotcha}
           onChange={handleChange}
           tabIndex={-1}
           autoComplete="off"

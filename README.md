@@ -42,6 +42,22 @@ product domain at `127.0.0.1` also works, because the dev server accepts
 nowhere else, so a link to another site is never written by hand in a
 component. See `.env.example`.
 
+### Contact forms
+
+The General Contact, Service Enquiry and Demo Request forms post directly to
+Formspree from the browser. There is no function and no server in between.
+
+`VITE_FORMSPREE_ENDPOINT` is read in `src/data/forms.js` and nowhere else, so
+the endpoint is written in one place. It is the only value that decides where
+enquiries go.
+
+Formspree's browser endpoint is public by design, it only accepts submissions,
+and it cannot be called from a server without a secret, so the `VITE_` prefix
+is correct here rather than careless. Restrict the form to the `enmero.in`
+domain in the Formspree dashboard so the endpoint only accepts this site.
+
+See `.env.example`.
+
 ---
 
 ## 🔒 License & Copyright
