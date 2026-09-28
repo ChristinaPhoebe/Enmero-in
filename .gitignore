@@ -31,3 +31,6 @@ dist-ssr
 
 # Playwright MCP test artifacts
 .playwright-mcp/
+
+# Downloaded source for scripts/build-globe-land.mjs
+scripts/.land-110m.json

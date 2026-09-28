@@ -1,8 +1,45 @@
 /* Watch Tower product page.
-   Composition follows a product-documentation rhythm: a text hero, bordered
-   panels on a 1px hairline grid, and a single accent panel at the close.
-   Borders are the main structural device, so corner radius stays at zero
-   except on the closing panel, which is the one deliberate break. */
+   Composition reads as a product story: a text hero, a full-bleed dark globe for
+   where traffic comes from, the ruled request diagram, then two large teal
+   feature sections before the closing panel. Borders and square marks are the
+   main structural device on the light sections, so corner radius stays at zero
+   except on the closing panel, which is the one deliberate break.
+
+   The teal ramp and the globe palette are declared once on the page root. The
+   light sections keep the Enmero lime that the diagram already uses; teal belongs
+   to the dark surfaces, where it is the only accent. */
+
+.watchtower {
+  --wt-teal-950: #04211c;
+  --wt-teal-900: #06322a;
+  --wt-teal-800: #0b5245;
+  --wt-teal-700: #0f6a58;
+  --wt-teal-600: #148a72;
+  --wt-teal-500: #1fa98c;
+  --wt-teal-400: #2cc19a;
+  --wt-teal-300: #5fd8b6;
+  --wt-teal-200: #9cecd5;
+  --wt-teal-100: #d3f5e9;
+  --wt-teal-050: #edf9f5;
+
+  --wt-ink: var(--color-brand-navy);
+  --wt-dark-line: rgba(150, 222, 208, 0.16);
+  --wt-dark-line-soft: rgba(150, 222, 208, 0.08);
+  --wt-dark-body: rgba(226, 244, 239, 0.7);
+  --wt-dark-muted: rgba(226, 244, 239, 0.44);
+  --wt-stopped: #5f7178;
+
+  /* The globe reads its colours back out of these, so the section and the
+     canvas cannot drift apart. */
+  --globe-ocean: #35707a;
+  --globe-land: #5fd8b6;
+  --globe-graticule: rgba(122, 202, 192, 0.1);
+  --globe-arc: #5fd8b6;
+  --globe-stopped: #5f7178;
+  --globe-origin: #a6ecd8;
+  --globe-hub: #c4f5e5;
+  --globe-halo: rgba(60, 190, 168, 0.12);
+}
 
 .container {
   max-width: 1280px;
@@ -15,6 +52,19 @@
   margin: 0 auto;
   border: 1px solid var(--color-border);
   background-color: var(--color-bg-primary);
+}
+
+/* ---------- Shared dark furniture ---------- */
+
+/* One eyebrow for every dark section, so the tone is set the same way each
+   time the page changes value. */
+.darkEyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--wt-teal-300);
+  margin-bottom: 22px;
 }
 
 /* ---------- Hero ---------- */
@@ -181,6 +231,137 @@
   background-color: var(--color-brand-lime);
 }
 
+/* ---------- Inbound traffic: the globe ---------- */
+
+.globeSection {
+  position: relative;
+  padding: 128px 0 104px;
+  background-color: var(--wt-ink);
+  overflow: hidden;
+  scroll-margin-top: 92px;
+}
+
+/* A single wide pool of light behind the sphere so the section reads as depth
+   rather than a flat block, and a hairline that separates it from the light
+   sections on either side. */
+.globeSection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 78% at 50% 44%, rgba(38, 130, 116, 0.28) 0%, rgba(11, 13, 26, 0) 62%),
+    linear-gradient(180deg, rgba(11, 13, 26, 0) 0%, rgba(6, 44, 40, 0.5) 100%);
+  pointer-events: none;
+}
+
+.globeSection::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--wt-dark-line);
+}
+
+.globeSection > * {
+  position: relative;
+}
+
+.globeHead {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.globeTitle {
+  font-family: var(--font-sans);
+  font-size: 54px;
+  font-weight: 500;
+  letter-spacing: -0.028em;
+  line-height: 1.05;
+  color: #ffffff;
+  margin-bottom: 22px;
+  text-wrap: balance;
+}
+
+.globeLead {
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--wt-dark-body);
+  max-width: 660px;
+  margin: 0 auto;
+  text-wrap: pretty;
+}
+
+.routeLegend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 32px;
+  margin: 34px 0 0;
+}
+
+.routeForwarded,
+.routeStopped {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--wt-dark-body);
+}
+
+/* The legend repeats the two outcomes the diagram and the globe both use, so
+   the marks are identical rather than three similar ideas. */
+.routeSwatch {
+  width: 22px;
+  height: 2px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.routeForwarded .routeSwatch {
+  background-color: var(--globe-arc);
+}
+
+.routeStopped .routeSwatch {
+  background-color: var(--globe-stopped);
+}
+
+.readings {
+  max-width: 1200px;
+  margin: 84px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--wt-dark-line);
+}
+
+.reading {
+  padding: 30px 34px 0;
+  border-left: 1px solid var(--wt-dark-line);
+}
+
+.reading:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.readingTitle {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.readingDesc {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--wt-dark-body);
+}
+
 /* ---------- Blocks ---------- */
 
 .block {
@@ -230,7 +411,7 @@
 .tower {
   position: relative;
   z-index: 2;
-  background-color: var(--color-brand-navy);
+  background-color: var(--wt-ink);
   border-left: 1px solid var(--color-border);
   border-right: 1px solid var(--color-border);
   justify-content: flex-start;
@@ -267,7 +448,7 @@
   width: 6px;
   height: 6px;
   flex-shrink: 0;
-  background-color: var(--color-brand-lime);
+  background-color: var(--wt-teal-300);
 }
 
 .requestList {
@@ -439,8 +620,7 @@
    land on the panel border instead of doubling it. That keeps the rules correct
    at any column count and when a cell spans rows, which nth-child rules cannot
    do without a separate set of overrides per breakpoint. */
-.cellGrid,
-.cellGridWide {
+.cellGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-right: -1px;
@@ -456,14 +636,6 @@
   border-right: 1px solid var(--color-border);
 }
 
-.cellLabel {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-text-secondary);
-}
-
 .cellTitle {
   font-family: var(--font-sans);
   font-size: 19px;
@@ -477,69 +649,6 @@
   font-size: 16px;
   line-height: 1.5;
   color: var(--color-text-secondary);
-}
-
-.cellIntro {
-  grid-row: span 2;
-  justify-content: flex-start;
-  gap: 14px;
-  border-bottom: none;
-  background-color: var(--color-bg-secondary);
-  border-right: 1px solid var(--color-border);
-}
-
-.introTitle {
-  font-family: var(--font-sans);
-  font-size: 32px;
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  line-height: 1.04;
-  color: var(--color-text-primary);
-  text-wrap: balance;
-}
-
-/* The dashed chip is a small technical label, not a badge or a pill. */
-.codeChip {
-  align-self: flex-start;
-  padding: 5px 10px;
-  border: 1px dashed #a3c400;
-  background-color: rgba(212, 255, 63, 0.14);
-}
-
-.codeText {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 13px;
-  font-weight: 500;
-  color: #4a5e00;
-}
-
-.stepIndex {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: var(--color-text-secondary);
-  font-variant-numeric: tabular-nums;
-}
-
-.ghostBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  align-self: flex-start;
-  margin-top: 6px;
-  padding: 11px 20px;
-  border: 1px solid var(--color-border-strong);
-  background-color: transparent;
-  font-family: var(--font-sans);
-  font-size: 14.5px;
-  font-weight: 500;
-  color: var(--color-text-primary);
-  transition: var(--transition-smooth);
-}
-
-.ghostBtn:hover {
-  border-color: var(--color-text-primary);
-  background-color: rgba(0, 0, 0, 0.03);
 }
 
 /* ---------- Centered statement ---------- */
@@ -573,16 +682,277 @@
   text-wrap: pretty;
 }
 
-/* The capabilities block reuses the statement, so it needs room before the
-   panel underneath rather than sitting flush against it. */
-.statementSpaced {
-  margin-bottom: 56px;
+/* ---------- Teal feature: how a request is handled ---------- */
+
+.tealSection {
+  position: relative;
+  margin-top: 112px;
+  padding: 120px 0 116px;
+  background-color: var(--wt-teal-900);
+  scroll-margin-top: 92px;
+}
+
+.tealHead {
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.tealTitle {
+  font-family: var(--font-sans);
+  font-size: 58px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  color: #ffffff;
+  margin-bottom: 22px;
+  text-wrap: balance;
+}
+
+.tealLead {
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--wt-dark-body);
+  max-width: 660px;
+  margin: 0 auto;
+  text-wrap: pretty;
+}
+
+/* Four checks read as one run. The hairline is the path the request takes, the
+   squares sit on it in order, and each ring leaves its node in turn. */
+.steps {
+  position: relative;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: 84px auto 0;
+  padding-top: 46px;
+}
+
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--wt-dark-line);
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stepNode {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  background-color: var(--wt-teal-300);
+}
+
+.stepNode::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 1px solid var(--wt-teal-300);
+  opacity: 0;
+  animation: stepRing 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  animation-delay: calc(var(--wt-order) * 0.7s);
+}
+
+@keyframes stepRing {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  22% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.stepIndex {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--wt-teal-300);
+  font-variant-numeric: tabular-nums;
+}
+
+.stepTitle {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.stepDesc {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--wt-dark-body);
+}
+
+.tealFoot {
+  max-width: 1200px;
+  margin: 72px auto 0;
+  padding-top: 26px;
+  border-top: 1px solid var(--wt-dark-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* The dashed chip is a small technical label, not a badge or a pill. */
+.codeChip {
+  padding: 6px 11px;
+  border: 1px dashed var(--wt-teal-500);
+  background-color: rgba(31, 169, 140, 0.12);
+}
+
+.codeText {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--wt-teal-200);
+}
+
+.tealLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--wt-teal-400);
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.tealLink:hover {
+  color: var(--wt-teal-200);
+  border-color: var(--wt-teal-200);
+}
+
+/* ---------- Teal feature: capability layers ---------- */
+
+.layerSection {
+  position: relative;
+  padding: 128px 0 132px;
+  background-color: var(--wt-teal-800);
+  scroll-margin-top: 92px;
+}
+
+/* A slow pool of light across the upper area gives the block a second value
+   without a second colour. */
+.layerSection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(80% 52% at 18% 0%, rgba(47, 193, 154, 0.16) 0%, rgba(11, 82, 69, 0) 70%);
+  pointer-events: none;
+}
+
+.layerSection > * {
+  position: relative;
+}
+
+.layerLayout {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 72px;
+  align-items: start;
+}
+
+.layerIntro {
+  max-width: 520px;
+}
+
+.layerTitle {
+  font-family: var(--font-sans);
+  font-size: 52px;
+  font-weight: 500;
+  letter-spacing: -0.028em;
+  line-height: 1.04;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-wrap: balance;
+}
+
+.layerLead {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--wt-dark-body);
+  max-width: 440px;
+  text-wrap: pretty;
+}
+
+.layers {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.layer {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  column-gap: 26px;
+  row-gap: 7px;
+  padding: 24px 0;
+  border-top: 1px solid var(--wt-dark-line);
+}
+
+.layer:last-child {
+  border-bottom: 1px solid var(--wt-dark-line);
+}
+
+.layerLabel {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--wt-teal-300);
+  padding-top: 4px;
+}
+
+.layerName {
+  grid-column: 2;
+  font-family: var(--font-sans);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.layerDesc {
+  grid-column: 2;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--wt-dark-body);
 }
 
 /* ---------- Closing panel ---------- */
 
 .ctaBlock {
-  padding: 80px 0 96px;
+  padding: 112px 0 112px;
   background-color: var(--color-bg-primary);
   scroll-margin-top: 92px;
 }
@@ -592,7 +962,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 96px 48px;
-  background-color: var(--color-brand-navy);
+  background-color: var(--wt-ink);
   border-radius: 16px;
   overflow: hidden;
   display: flex;
@@ -665,7 +1035,7 @@
 .ctaPrimary {
   background-color: var(--color-brand-lime);
   border: 1px solid var(--color-brand-lime);
-  color: var(--color-brand-navy);
+  color: var(--wt-ink);
 }
 
 .ctaPrimary:hover {
@@ -693,6 +1063,13 @@
   transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Rows inside a large teal block arrive in order, so a list reads as one thing
+   building rather than six separate arrivals. */
+.step,
+.layer {
+  transition-delay: calc(var(--wt-order, 0) * 70ms);
+}
+
 .revealed {
   opacity: 1;
   transform: none;
@@ -716,15 +1093,65 @@
     border-top: 1px solid var(--color-border);
   }
 
-  .cellIntro {
-    grid-row: auto;
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  /* Stacked, the path runs down the left instead of across the top. */
+  .steps::before {
+    top: 7px;
+    bottom: 7px;
+    left: 4px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+
+  .step {
+    padding-left: 30px;
+  }
+
+  .stepNode {
+    top: 3px;
+    left: 0;
+  }
+
+  .layerLayout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 52px;
+  }
+
+  .layerIntro {
+    max-width: none;
+  }
+
+  .layerLead {
+    max-width: 640px;
   }
 }
 
 @media (max-width: 900px) {
-  .cellGrid,
-  .cellGridWide {
+  .cellGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .readings {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 64px;
+  }
+
+  .reading {
+    padding: 24px 0;
+    border-left: none;
+    border-top: 1px solid var(--wt-dark-line);
+  }
+
+  .reading:first-child {
+    padding-top: 28px;
+    border-top: none;
   }
 }
 
@@ -765,6 +1192,25 @@
   .anchorNav {
     gap: 6px 20px;
     padding-top: 22px;
+  }
+
+  .globeSection {
+    padding: 88px 0 76px;
+  }
+
+  .globeTitle {
+    font-size: 34px;
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
+
+  .globeLead {
+    font-size: 16.5px;
+  }
+
+  .routeLegend {
+    margin-top: 26px;
+    gap: 10px 22px;
   }
 
   .block {
@@ -834,8 +1280,7 @@
     padding: 16px 24px;
   }
 
-  .cellGrid,
-  .cellGridWide {
+  .cellGrid {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -852,12 +1297,77 @@
     font-size: 16px;
   }
 
-  .statementSpaced {
-    margin-bottom: 40px;
+  .tealSection {
+    margin-top: 72px;
+    padding: 84px 0 80px;
+  }
+
+  .tealTitle {
+    font-size: 36px;
+    line-height: 1.06;
+    margin-bottom: 18px;
+  }
+
+  .tealLead {
+    font-size: 16.5px;
+  }
+
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .stepTitle {
+    font-size: 24px;
+  }
+
+  .tealFoot {
+    margin-top: 52px;
+    gap: 18px;
+  }
+
+  .layerSection {
+    padding: 84px 0 88px;
+  }
+
+  .layerLayout {
+    gap: 40px;
+  }
+
+  .layerTitle {
+    font-size: 34px;
+    line-height: 1.08;
+  }
+
+  .layerLead {
+    font-size: 16.5px;
+  }
+
+  .layer {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 6px;
+    padding: 22px 0;
+  }
+
+  .layerLabel {
+    grid-column: 1;
+    grid-row: auto;
+    padding-top: 0;
+  }
+
+  .layerName {
+    grid-column: 1;
+    font-size: 20px;
+  }
+
+  .layerDesc {
+    grid-column: 1;
   }
 
   .ctaBlock {
-    padding: 56px 0 72px;
+    padding: 72px 0 80px;
   }
 
   .ctaPanel {
@@ -889,8 +1399,16 @@
     font-size: 28px;
   }
 
-  .introTitle {
-    font-size: 24px;
+  .globeTitle {
+    font-size: 29px;
+  }
+
+  .tealTitle {
+    font-size: 30px;
+  }
+
+  .layerTitle {
+    font-size: 29px;
   }
 
   .ctaTitle {
@@ -943,7 +1461,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .packetOk,
-  .packetBlocked {
+  .packetBlocked,
+  .stepNode::after {
     animation: none;
   }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './WatchTower.module.css';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
+import Globe from '../components/watchtower/Globe.jsx';
 import watchtowerLogo from '../../assets/logo/watchtower-logo.png';
 import { WATCHTOWER_URL, enmeroPage } from '../sites.js';
 
@@ -101,8 +102,31 @@ const CAPABILITIES = [
   }
 ];
 
+// The globe section explains the same two outcomes as the request diagram below
+// it, so both are labelled the same way rather than inventing a third term.
+const ROUTES = [
+  { state: 'forwarded', label: 'Forwarded to your website' },
+  { state: 'stopped', label: 'Stopped at the protection layer' }
+];
+
+const READINGS = [
+  {
+    title: 'Read on arrival',
+    desc: 'Method, path, headers, and request rate are read as the request arrives, before anything reaches your server.'
+  },
+  {
+    title: 'Decided in one place',
+    desc: 'Firewall rules, bot checks, and rate limits all run at the protection layer rather than inside your application.'
+  },
+  {
+    title: 'Forwarded unchanged',
+    desc: 'Traffic that passes is delivered to your website over HTTPS, in the same way it was before.'
+  }
+];
+
 const ANCHORS = [
   { id: 'wt-overview', label: 'Overview' },
+  { id: 'wt-globe', label: 'Traffic' },
   { id: 'wt-how-it-works', label: 'How it works' },
   { id: 'wt-capabilities', label: 'Capabilities' },
   { id: 'wt-request-demo', label: 'Request a demo' }
@@ -171,7 +195,7 @@ export default function WatchTower() {
   };
 
   return (
-    <div ref={rootRef}>
+    <div ref={rootRef} className={styles.watchtower}>
       {/* Hero */}
       <section className={styles.hero} id="wt-overview">
         <div className={`${styles.container} container`}>
@@ -189,8 +213,8 @@ export default function WatchTower() {
                 Request a Demo
                 <ArrowUpRight size={15} aria-hidden="true" />
               </a>
-              <button type="button" className={styles.secondaryBtn} onClick={scrollTo('wt-how-it-works')}>
-                How it works
+              <button type="button" className={styles.secondaryBtn} onClick={scrollTo('wt-globe')}>
+                How traffic is handled
               </button>
             </div>
             <nav className={styles.anchorNav} aria-label="Watch Tower sections">
@@ -208,6 +232,47 @@ export default function WatchTower() {
           </div>
         </div>
         <div className={styles.heroRule} aria-hidden="true" />
+      </section>
+
+      {/* Inbound traffic. The globe is the product idea rather than a network
+          claim: it shows where requests come from, not where Watch Tower runs. */}
+      <section className={styles.globeSection} id="wt-globe" aria-labelledby="wt-globe-title">
+        <div className={`${styles.container} container`}>
+          <div className={styles.globeHead} data-reveal>
+            <p className={styles.darkEyebrow}>Incoming traffic</p>
+            <h2 className={styles.globeTitle} id="wt-globe-title">
+              Every request is judged before your server is involved
+            </h2>
+            <p className={styles.globeLead}>
+              A visitor can be on the other side of the world and the handling is identical. Each
+              request is read as it arrives, and only the traffic that passes is forwarded to your
+              website.
+            </p>
+          </div>
+
+          <Globe />
+
+          <ul className={styles.routeLegend} data-reveal>
+            {ROUTES.map((route) => (
+              <li
+                key={route.state}
+                className={route.state === 'forwarded' ? styles.routeForwarded : styles.routeStopped}
+              >
+                <span className={styles.routeSwatch} aria-hidden="true" />
+                {route.label}
+              </li>
+            ))}
+          </ul>
+
+          <dl className={styles.readings} data-reveal>
+            {READINGS.map((reading) => (
+              <div key={reading.title} className={styles.reading}>
+                <dt className={styles.readingTitle}>{reading.title}</dt>
+                <dd className={styles.readingDesc}>{reading.desc}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
 
       {/* Request flow */}
@@ -285,22 +350,6 @@ export default function WatchTower() {
         </div>
       </section>
 
-      {/* Why it matters */}
-      <section className={styles.block}>
-        <div className={`${styles.container} container`}>
-          <div className={styles.panel} data-reveal>
-            <div className={styles.cellGrid}>
-              {REASONS.map((reason) => (
-                <div key={reason.title} className={styles.cell}>
-                  <h3 className={styles.cellTitle}>{reason.title}</h3>
-                  <p className={styles.cellDesc}>{reason.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Statement */}
       <section className={styles.block}>
         <div className={`${styles.container} container`}>
@@ -317,31 +366,15 @@ export default function WatchTower() {
         </div>
       </section>
 
-      {/* How a request is handled */}
-      <section className={styles.block} id="wt-how-it-works">
+      {/* Why it matters */}
+      <section className={styles.block}>
         <div className={`${styles.container} container`}>
           <div className={styles.panel} data-reveal>
-            <div className={styles.cellGridWide}>
-              <div className={`${styles.cell} ${styles.cellIntro}`}>
-                <span className={styles.codeChip}>
-                  <code className={styles.codeText}>watchtower</code>
-                </span>
-                <h2 className={styles.introTitle}>One request, four checks</h2>
-                <p className={styles.cellDesc}>
-                  The same sequence runs for every request that reaches the protection layer,
-                  whether it comes from a first-time visitor or from an automated script.
-                </p>
-                <a href={DEMO_URL} className={styles.ghostBtn}>
-                  Request a Demo
-                  <ArrowRight size={14} aria-hidden="true" />
-                </a>
-              </div>
-
-              {STEPS.map((step, index) => (
-                <div key={step.label} className={styles.cell}>
-                  <p className={styles.stepIndex}>0{index + 1}</p>
-                  <h3 className={styles.cellTitle}>{step.label}</h3>
-                  <p className={styles.cellDesc}>{step.desc}</p>
+            <div className={styles.cellGrid}>
+              {REASONS.map((reason) => (
+                <div key={reason.title} className={styles.cell}>
+                  <h3 className={styles.cellTitle}>{reason.title}</h3>
+                  <p className={styles.cellDesc}>{reason.desc}</p>
                 </div>
               ))}
             </div>
@@ -349,27 +382,77 @@ export default function WatchTower() {
         </div>
       </section>
 
-      {/* Capabilities */}
-      <section className={styles.block} id="wt-capabilities">
+      {/* How a request is handled. Deep teal, with the four checks read as one
+          continuous run rather than four separate cards. */}
+      <section className={styles.tealSection} id="wt-how-it-works" aria-labelledby="wt-steps-title">
         <div className={`${styles.container} container`}>
-          <div className={`${styles.statement} ${styles.statementSpaced}`} data-reveal>
-            <h2 className={styles.statementTitle}>What the protection layer handles</h2>
-            <p className={styles.statementLead}>
-              Six capabilities run at the layer. Each one addresses a different kind of unwanted
-              traffic, and all of them operate before your website responds.
+          <div className={styles.tealHead} data-reveal>
+            <p className={styles.darkEyebrow}>How a request is handled</p>
+            <h2 className={styles.tealTitle} id="wt-steps-title">One request, four checks</h2>
+            <p className={styles.tealLead}>
+              The same sequence runs for every request that reaches the protection layer, whether
+              it comes from a first-time visitor or from an automated script.
             </p>
           </div>
 
-          <div className={styles.panel} data-reveal>
-            <div className={styles.cellGrid}>
-              {CAPABILITIES.map((capability) => (
-                <div key={capability.title} className={styles.cell}>
-                  <p className={styles.cellLabel}>{capability.label}</p>
-                  <h3 className={styles.cellTitle}>{capability.title}</h3>
-                  <p className={styles.cellDesc}>{capability.desc}</p>
-                </div>
-              ))}
+          <ol className={styles.steps}>
+            {STEPS.map((step, index) => (
+              <li
+                key={step.label}
+                className={styles.step}
+                data-reveal
+                style={{ '--wt-order': index }}
+              >
+                <span className={styles.stepNode} aria-hidden="true" />
+                <p className={styles.stepIndex}>0{index + 1}</p>
+                <h3 className={styles.stepTitle}>{step.label}</h3>
+                <p className={styles.stepDesc}>{step.desc}</p>
+              </li>
+            ))}
+          </ol>
+
+          <div className={styles.tealFoot} data-reveal>
+            <span className={styles.codeChip}>
+              <code className={styles.codeText}>watchtower</code>
+            </span>
+            <a href={DEMO_URL} className={styles.tealLink}>
+              Request a Demo
+              <ArrowRight size={14} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Capabilities. A second teal value, composed as a list of layers beside
+          its own heading rather than a grid of equal cards. */}
+      <section className={styles.layerSection} id="wt-capabilities" aria-labelledby="wt-capabilities-title">
+        <div className={`${styles.container} container`}>
+          <div className={styles.layerLayout}>
+            <div className={styles.layerIntro} data-reveal>
+              <p className={styles.darkEyebrow}>Capabilities</p>
+              <h2 className={styles.layerTitle} id="wt-capabilities-title">
+                What the protection layer handles
+              </h2>
+              <p className={styles.layerLead}>
+                Six capabilities run at the layer. Each one addresses a different kind of unwanted
+                traffic, and all of them operate before your website responds.
+              </p>
             </div>
+
+            <ol className={styles.layers}>
+              {CAPABILITIES.map((capability, index) => (
+                <li
+                  key={capability.title}
+                  className={styles.layer}
+                  data-reveal
+                  style={{ '--wt-order': index }}
+                >
+                  <span className={styles.layerLabel}>{capability.label}</span>
+                  <h3 className={styles.layerName}>{capability.title}</h3>
+                  <p className={styles.layerDesc}>{capability.desc}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>

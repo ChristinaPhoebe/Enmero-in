@@ -10,6 +10,7 @@ const DEMO_URL = enmeroPage('/demo');
 
 const SECTIONS = [
   { id: 'wt-overview', label: 'Overview' },
+  { id: 'wt-globe', label: 'Traffic' },
   { id: 'wt-how-it-works', label: 'How it works' },
   { id: 'wt-capabilities', label: 'Capabilities' }
 ];
