@@ -3,7 +3,6 @@ import TermsAndConditions from './pages/TermsAndConditions.jsx';
 import RefundCancellation from './pages/RefundCancellation.jsx';
 import CookiePolicy from './pages/CookiePolicy.jsx';
 import Disclaimer from './pages/Disclaimer.jsx';
-import WatchTower from './pages/WatchTower.jsx';
 import Services from './pages/Services.jsx';
 import ServiceDetail from './pages/ServiceDetail.jsx';
 import Contact from './pages/Contact.jsx';
@@ -39,7 +38,8 @@ export const BLOG_PAGES = BLOG_ARTICLES.map((article) => ({
 }));
 
 export const STATIC_PAGES = [
-  { path: '/watch-tower', label: 'Watchtower', Component: WatchTower },
+  // Watch Tower is deliberately absent. It is a product with its own domain
+  // and is reached by hostname, never as a page of this site.
   { path: '/services', label: 'Services', Component: Services },
   ...SERVICE_PAGES,
   { path: '/blog', label: 'Blog', Component: Blog },

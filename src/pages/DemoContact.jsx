@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './DemoContact.module.css';
 import useEnquirySubmit from '../hooks/useEnquirySubmit.js';
 import { WATCHTOWER_SERVICE } from '../data/services.js';
+import { WATCHTOWER_URL } from '../sites.js';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -112,7 +113,7 @@ export default function DemoContact() {
                 Thank you, <strong>{values.fullName.trim() || 'there'}</strong>. We have received your
                 demo request and will get back to you shortly to schedule a walkthrough.
               </div>
-              <a href="#/watch-tower" className={styles.backLink}>Back to product page</a>
+              <a href={WATCHTOWER_URL} className={styles.backLink}>Back to product page</a>
             </div>
           </div>
         </section>

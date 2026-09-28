@@ -2,6 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import styles from './WatchTower.module.css';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
 import watchtowerLogo from '../../assets/logo/watchtower-logo.png';
+import { WATCHTOWER_URL, enmeroPage } from '../sites.js';
+
+// The forms live on the Enmero website. The product has its own domain and no
+// router of its own, so these are absolute links rather than hash routes.
+const DEMO_URL = enmeroPage('/demo');
+const CONTACT_URL = enmeroPage('/contact');
 
 const TITLE = 'Watch Tower | Website protection layer | enmero';
 const DESCRIPTION =
@@ -110,12 +116,21 @@ export default function WatchTower() {
     const meta = document.querySelector('meta[name="description"]');
     const previousDescription = meta ? meta.getAttribute('content') : null;
 
+    // One project serves several domains, so the product domain is declared the
+    // one home for this content. Without it the same page is reachable under
+    // every host the project answers on.
+    const canonical = document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', `${WATCHTOWER_URL}/`);
+    document.head.appendChild(canonical);
+
     document.title = TITLE;
     if (meta) meta.setAttribute('content', DESCRIPTION);
 
     return () => {
       document.title = previousTitle;
       if (meta && previousDescription !== null) meta.setAttribute('content', previousDescription);
+      canonical.remove();
     };
   }, []);
 
@@ -173,7 +188,7 @@ export default function WatchTower() {
               secure connection.
             </p>
             <div className={styles.heroCta}>
-              <a href="#/demo" className={styles.primaryBtn}>
+              <a href={DEMO_URL} className={styles.primaryBtn}>
                 Request a Demo
                 <ArrowUpRight size={15} aria-hidden="true" />
               </a>
@@ -319,7 +334,7 @@ export default function WatchTower() {
                   The same sequence runs for every request that reaches the protection layer,
                   whether it comes from a first-time visitor or from an automated script.
                 </p>
-                <a href="#/demo" className={styles.ghostBtn}>
+                <a href={DEMO_URL} className={styles.ghostBtn}>
                   Request a Demo
                   <ArrowRight size={14} aria-hidden="true" />
                 </a>
@@ -373,11 +388,11 @@ export default function WatchTower() {
               forwarded for your website.
             </p>
             <div className={styles.ctaActions}>
-              <a href="#/demo" className={styles.ctaPrimary}>
+              <a href={DEMO_URL} className={styles.ctaPrimary}>
                 Request a Demo
                 <ArrowUpRight size={15} aria-hidden="true" />
               </a>
-              <a href="#/contact" className={styles.ctaSecondary}>Get in Touch</a>
+              <a href={CONTACT_URL} className={styles.ctaSecondary}>Get in Touch</a>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styles from './AgentJourney.module.css';
 import { Sparkles, Loader, Send, ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react';
+import { WATCHTOWER_URL } from '../sites.js';
 
 const totalSlides = 3;
 
@@ -235,7 +236,7 @@ export default function AgentJourney() {
               engagement with simple monthly pricing.
             </p>
           </div>
-          <a href="#/watch-tower" className={styles.watchTowerCtaBtn}>
+          <a href={WATCHTOWER_URL} className={styles.watchTowerCtaBtn}>
             Explore Watchtower
             <ArrowUpRight size={14} />
           </a>

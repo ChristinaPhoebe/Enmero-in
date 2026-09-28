@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './Navbar.module.css';
 import { Menu, X } from 'lucide-react';
 import logo from '../../assets/logo/enmero-logo.png';
+import { WATCHTOWER_URL } from '../sites.js';
 
 export default function Navbar({ isLoggedIn, onLogout, topOffset = 0 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,7 +60,7 @@ export default function Navbar({ isLoggedIn, onLogout, topOffset = 0 }) {
           {/* Desktop Left Menu Links */}
           <div className={styles.menuDesktopLeft}>
             <a href="#/services" className={styles.navLink}>Services</a>
-            <a href="#/watch-tower" className={styles.navLink}>Product</a>
+            <a href={WATCHTOWER_URL} className={styles.navLink}>Product</a>
             <a href="#/blog" className={styles.navLink}>Blog</a>
           </div>
         </div>
@@ -91,7 +92,7 @@ export default function Navbar({ isLoggedIn, onLogout, topOffset = 0 }) {
       {isOpen && (
         <div className={styles.menuMobile} id="mobile-navigation">
           <a href="#/services" className={styles.mobileLink}>Services</a>
-          <a href="#/watch-tower" className={styles.mobileLink}>Product</a>
+          <a href={WATCHTOWER_URL} className={styles.mobileLink}>Product</a>
           <a href="#/blog" className={styles.mobileLink}>Blog</a>
           <a href="#/contact" className={styles.mobileLink}>Get in Touch</a>
         </div>

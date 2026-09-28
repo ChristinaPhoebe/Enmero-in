@@ -3,6 +3,7 @@ import styles from './Footer.module.css';
 import logo from '../../assets/logo/enmero-logo.png';
 import { LEGAL_PAGES } from '../routes.js';
 import { SERVICES, servicePath } from '../data/services.js';
+import { WATCHTOWER_URL } from '../sites.js';
 
 const goHome = (e) => {
   e.preventDefault();
@@ -35,7 +36,7 @@ export default function Footer() {
 
           <div className={styles.linkGroup}>
             <span className={styles.groupTitle}>Product</span>
-            <a href="#/watch-tower" className={styles.footerLink}>Watchtower</a>
+            <a href={WATCHTOWER_URL} className={styles.footerLink}>Watchtower</a>
           </div>
 
           <div className={styles.linkGroup}>
