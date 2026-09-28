@@ -11,8 +11,14 @@
   --color-text-secondary: #5a5a58;
   --color-text-tertiary: #8a8986;
   --color-border: #e6e5e2;
+  --color-border-strong: #d5d4d0;
   --color-brand-black: #0d0d0d;
+  --color-brand-navy: #0B0D1A;
   --color-brand-blue-accent: #3b82f6;
+  /* The lime already used to highlight words on the homepage. It reads as the
+     Enmero accent on light panels and as the trusted colour in product
+     diagrams, so it is a token rather than a repeated literal. */
+  --color-brand-lime: #d4ff3f;
   
   /* Gradients from Handhold images */
   --grad-ribbon: linear-gradient(135deg, #fcd34d 0%, #f472b6 40%, #60a5fa 70%, #93c5fd 100%);
