@@ -4,22 +4,13 @@ import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 
 const testimonials = [
   {
-    quote: "Working with enmero was straightforward. They understood what we needed, communicated clearly throughout the project, and delivered a product that worked exactly as expected.",
-    author: "Client",
-    title: "Web Application Project",
-    avatarColor: "#e0f2fe"
+    quote: "Working with enmero was straightforward. They understood what we needed, communicated clearly throughout the project, and delivered a product that worked exactly as expected."
   },
   {
-    quote: "The team at enmero cares about the details. Our project was handled professionally from start to finish, and the final result was better than we initially envisioned.",
-    author: "Client",
-    title: "Process Modernization Project",
-    avatarColor: "#fef3c7"
+    quote: "The team at enmero cares about the details. Our project was handled professionally from start to finish, and the final result was better than we initially envisioned."
   },
   {
-    quote: "Enmero helped us build our product from the ground up. Their combination of technical skill and design thinking made a real difference in the quality of what was delivered.",
-    author: "Client",
-    title: "Product Development Project",
-    avatarColor: "#d1fae5"
+    quote: "Enmero helped us build our product from the ground up. Their combination of technical skill and design thinking made a real difference in the quality of what was delivered."
   }
 ];
 
@@ -80,29 +71,13 @@ export default function TestimonialsFAQ() {
                 “{testimonials[currentSlide].quote}”
               </blockquote>
               
-              <div className={styles.authorSection}>
-                <div className={styles.authorLeft}>
-                  {/* Custom SVG Avatar */}
-                  <div className={styles.avatar} style={{ backgroundColor: testimonials[currentSlide].avatarColor }}>
-                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="24" cy="24" r="24" fill="transparent"/>
-                      <path d="M24 22C26.7614 22 29 19.7614 29 17C29 14.2386 26.7614 12 24 12C21.2386 12 19 14.2386 19 17C19 19.7614 21.2386 22 24 22ZM24 25C19.0294 25 15 29.0294 15 34V36H33V34C33 29.0294 28.9706 25 24 25Z" fill="#4b5563"/>
-                    </svg>
-                  </div>
-                  <div className={styles.authorDetails}>
-                    <div className={styles.authorName}>{testimonials[currentSlide].author}</div>
-                    <div className={styles.authorTitle}>{testimonials[currentSlide].title}</div>
-                  </div>
-                </div>
-
-                <div className={styles.carouselNav}>
-                  <button className={styles.navBtn} onClick={handlePrevSlide} aria-label="Previous quote">
-                    <ChevronLeft size={20} />
-                  </button>
-                  <button className={styles.navBtn} onClick={handleNextSlide} aria-label="Next quote">
-                    <ChevronRight size={20} />
-                  </button>
-                </div>
+              <div className={styles.carouselNav}>
+                <button className={styles.navBtn} onClick={handlePrevSlide} aria-label="Previous quote">
+                  <ChevronLeft size={20} />
+                </button>
+                <button className={styles.navBtn} onClick={handleNextSlide} aria-label="Next quote">
+                  <ChevronRight size={20} />
+                </button>
               </div>
             </div>
           </div>

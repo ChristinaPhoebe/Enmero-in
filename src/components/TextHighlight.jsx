@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styles from './TextHighlight.module.css';
-import logo from '../../assets/logo/enmero-logo.png';
 
 export default function TextHighlight() {
   const sectionRef = useRef(null);
@@ -57,12 +56,6 @@ export default function TextHighlight() {
         <svg className={`${styles.wave} ${styles.wave2}`} viewBox="0 0 2880 200" preserveAspectRatio="none">
           <path d="M0,110 C300,80 600,130 900,105 C1200,80 1500,130 1800,105 C2100,80 2400,130 2700,105 C3000,80 3300,130 3600,105 L3600,200 L0,200 Z" fill="rgba(90, 90, 88, 0.07)"></path>
         </svg>
-
-        {/* Floating Logo Boat (Automatic Right-to-Left Slide & Loop) */}
-        <div className={styles.logoBoat}>
-          <img src={logo} alt="enmero logo" className={styles.logoBoatImg} />
-          <div className={styles.wake} />
-        </div>
 
         {/* Wave 3 (Front Layer) */}
         <svg className={`${styles.wave} ${styles.wave3}`} viewBox="0 0 2880 200" preserveAspectRatio="none">

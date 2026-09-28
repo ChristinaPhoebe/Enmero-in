@@ -27,49 +27,10 @@
   letter-spacing: -0.02em;
 }
 
-.authorSection {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.authorLeft {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
-}
-
-.authorDetails {
-  display: flex;
-  flex-direction: column;
-}
-
-.authorName {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.authorTitle {
-  font-size: 13px;
-  color: var(--color-text-tertiary);
-}
-
 .carouselNav {
   display: flex;
   gap: 12px;
+  justify-content: flex-end;
 }
 
 .navBtn {
@@ -193,14 +154,6 @@
     line-height: 1.4;
     margin-bottom: 28px;
     overflow-wrap: anywhere;
-  }
-
-  .authorName {
-    font-size: 14px;
-  }
-
-  .authorTitle {
-    font-size: 12px;
   }
 
   .faqHeader {
