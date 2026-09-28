@@ -4,7 +4,7 @@
 //
 // The navbar turns this list into a dropdown and the footer renders it as
 // plain links, so a product is only added here.
-import watchtowerLogo from '../../assets/logo/watchtower-logo.png';
+import watchtowerSymbol from '../../assets/logo/watchtower-symbol.png';
 import { WATCHTOWER_URL } from '../sites.js';
 
 export const PRODUCTS = [
@@ -14,8 +14,11 @@ export const PRODUCTS = [
     // The address lives in sites.js so a cross domain link is never written
     // by hand in a component.
     url: WATCHTOWER_URL,
-    // Dark artwork, so it is only used on the light navbar dropdown.
-    logo: watchtowerLogo,
+    // The symbol rather than the wordmark. The row already carries the name in
+    // text, so the mark only has to identify the product at a glance, and the
+    // portrait symbol stays legible at a fraction of the width the wordmark
+    // needs. Dark artwork, so it is only used on the light navbar dropdown.
+    logo: watchtowerSymbol,
   },
   {
     id: 'stanrig',

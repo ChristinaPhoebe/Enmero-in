@@ -170,8 +170,12 @@
   outline-offset: -2px;
 }
 
+/* Sized from the mark rather than from a wordmark. The Watch Tower symbol is a
+   portrait mark inside a square-ish canvas with even transparent padding, so the
+   box is set larger than the text beside it to leave a visible mark that is
+   about the same height as the 15px label. */
 .productLogo {
-  height: 16px;
+  height: 24px;
   width: auto;
   object-fit: contain;
 }
